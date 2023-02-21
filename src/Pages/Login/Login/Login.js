@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 
 const Login = () => {
+    const [error, setError] = useState('');
     const { signIn } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -14,12 +17,19 @@ const Login = () => {
         const email = form.email.value;
         const password = form.password.value;
 
+        const from = location.state?.from?.pathname || '/';
+
         signIn(email, password)
             .then(result => {
                 const user = result.user;
+                setError('');
                 form.reset();
+                navigate(from, { replace: true })
             })
-            .catch(error => console.error(error))
+            .catch(error => {
+                console.error(error)
+                setError(error.message);
+            })
     }
 
     return (
@@ -37,6 +47,9 @@ const Login = () => {
                             <Form.Label>Password</Form.Label>
                             <Form.Control name="password" type="password" placeholder="Password" />
                         </Form.Group>
+                        <Form.Text className="text-danger m-0 mb-2 d-block">
+                            {error}
+                        </Form.Text>
 
                         <Form.Group className="mb-3" controlId="formBasicCheckbox">
                             <Form.Check type="checkbox" label="Check me out" />
