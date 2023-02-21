@@ -39,11 +39,11 @@ const Header = () => {
                             </NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-                    <Nav>
+                    <Nav className='d-flex align-items-center'>
                         {
                             user?.uid ?
                                 <>
-                                    <span>{user.displayName}</span>
+                                    <span className='text-white text-capitalize'>{user.displayName}</span>
                                     <Button className="mx-3" onClick={handleLogOut}
                                         variant="primary"
                                     >Logout</Button>
@@ -60,7 +60,7 @@ const Header = () => {
                         }
 
                         <Nav.Link href="#deets">
-                            {user?.photoURL ? <Image roundedCircle style={{ height: '30px' }} src={user?.photoURL}></Image> : <FaUserAlt></FaUserAlt>}
+                            {user?.photoURL ? <Image roundedCircle style={{ height: '40px', width: '40px' }} src={user?.photoURL}></Image> : <FaUserAlt></FaUserAlt>}
                         </Nav.Link>
                     </Nav>
                     <div className='d-md-none'>

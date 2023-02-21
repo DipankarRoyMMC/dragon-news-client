@@ -6,8 +6,9 @@ import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 
 const Register = () => {
-    const { createUser } = useContext(AuthContext);
+    const { createUser, updateUserProfile } = useContext(AuthContext);
     const [error, setError] = useState('');
+    const [accepted, setAccepted] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -22,11 +23,28 @@ const Register = () => {
                 const user = result.user;
                 form.reset();
                 setError('');
+                handleUpdateUserProfile(name, photoURL);
             })
             .catch(error => {
                 console.error(error)
                 setError(error.message)
             })
+
+    }
+
+    const handleCheckAccepted = (event) => {
+        setAccepted(event.target.checked);
+    }
+
+    const handleUpdateUserProfile = (name, photoURL) => {
+        const profile = {
+            displayName: name,
+            photoURL: photoURL
+
+        }
+        updateUserProfile(profile)
+            .then(() => { })
+            .catch(error => console.error(error));
     }
 
     return (
@@ -56,14 +74,20 @@ const Register = () => {
                             {error}
                         </Form.Text>
 
-                        <Button className='px-4 mb-3' variant="primary" type="submit">
+                        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                            <Form.Check onClick={handleCheckAccepted}
+                                type="checkbox"
+                                label={<>Accepted <Link to='/terms'>Terms and Condition</Link></>} />
+                        </Form.Group>
+
+                        <Button className='px-4 mb-3' variant="primary" type="submit" disabled={!accepted}>
                             Register
                         </Button>
                     </Form>
                     <span>All ready Have an account? <Link to='/login'>Login</Link></span>
                 </Col>
             </Row>
-        </Container>
+        </Container >
     );
 };
 
