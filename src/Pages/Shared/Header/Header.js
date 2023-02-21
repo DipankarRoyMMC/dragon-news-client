@@ -3,13 +3,21 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { FaUserAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 import LeftSideNav from '../LeftSideNav/LeftSideNav';
+import Image from 'react-bootstrap/Image'
+import { Button } from 'react-bootstrap';
 
 
 const Header = () => {
-    const { user } = useContext(AuthContext);
+    const { user, logOut } = useContext(AuthContext);
+    const handleLogOut = () => {
+        logOut()
+            .then(() => { })
+            .catch(error => console.error(error))
+    }
     return (
         <Navbar className="mb-4" collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Container>
@@ -32,9 +40,31 @@ const Header = () => {
                         </NavDropdown>
                     </Nav>
                     <Nav>
-                        <Nav.Link href="#deets">More deets</Nav.Link>
-                        <Nav.Link eventKey={2} href="#memes">
-                            {user?.displayName}
+
+                        <Nav.Link eventKey={2}>
+                            {
+                                user?.uid ?
+                                    <>
+                                        <span>{user.displayName}</span>
+                                        <Button className="mx-3" onClick={handleLogOut}
+                                            variant="primary"
+                                        >Logout</Button>
+                                    </>
+                                    :
+                                    <>
+                                        <Link to='/login'>
+                                            <Button className='me-3' variant="secondary">Login</Button>
+                                        </Link>
+                                        <Link to='/'>
+                                            <Button variant="primary">Logout</Button>
+                                        </Link>
+                                    </>
+                            }
+
+
+                        </Nav.Link>
+                        <Nav.Link href="#deets">
+                            {user?.photoURL ? <Image roundedCircle style={{ height: '30px' }} src={user?.photoURL}></Image> : <FaUserAlt></FaUserAlt>}
                         </Nav.Link>
                     </Nav>
                     <div className='d-md-none'>
@@ -42,7 +72,7 @@ const Header = () => {
                     </div>
                 </Navbar.Collapse>
             </Container>
-        </Navbar>
+        </Navbar >
     );
 };
 
