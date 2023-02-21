@@ -40,29 +40,25 @@ const Header = () => {
                         </NavDropdown>
                     </Nav>
                     <Nav>
+                        {
+                            user?.uid ?
+                                <>
+                                    <span>{user.displayName}</span>
+                                    <Button className="mx-3" onClick={handleLogOut}
+                                        variant="primary"
+                                    >Logout</Button>
+                                </>
+                                :
+                                <>
+                                    <Link to='/login'>
+                                        <Button className='me-3' variant="secondary">Login</Button>
+                                    </Link>
+                                    <Link to='/'>
+                                        <Button variant="primary">Logout</Button>
+                                    </Link>
+                                </>
+                        }
 
-                        <Nav.Link eventKey={2}>
-                            {
-                                user?.uid ?
-                                    <>
-                                        <span>{user.displayName}</span>
-                                        <Button className="mx-3" onClick={handleLogOut}
-                                            variant="primary"
-                                        >Logout</Button>
-                                    </>
-                                    :
-                                    <>
-                                        <Link to='/login'>
-                                            <Button className='me-3' variant="secondary">Login</Button>
-                                        </Link>
-                                        <Link to='/'>
-                                            <Button variant="primary">Logout</Button>
-                                        </Link>
-                                    </>
-                            }
-
-
-                        </Nav.Link>
                         <Nav.Link href="#deets">
                             {user?.photoURL ? <Image roundedCircle style={{ height: '30px' }} src={user?.photoURL}></Image> : <FaUserAlt></FaUserAlt>}
                         </Nav.Link>
